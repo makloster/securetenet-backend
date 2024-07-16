@@ -1,10 +1,9 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Module } from '@nestjs/common'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { TypeOrmModule } from '@nestjs/typeorm'
 
-
-import { UsuariosModule } from './usuarios/usuarios.module';
+import { UsersModule } from './users/users.module'
 
 const DATABASE_PORT = parseInt(process.env.DB_PORT, 10)
 
@@ -12,15 +11,17 @@ const DATABASE_PORT = parseInt(process.env.DB_PORT, 10)
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST,
-      port: DATABASE_PORT,
-      username: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
+      host: 'localhost',
+      port: 5432,
+      username: 'db-admin',
+      password: '7a8s9.g5h6',
+      database: 'sn-db',
       autoLoadEntities: true,
       synchronize: true,
+      retryDelay: 3000,
+      retryAttempts: 10
     }),
-    UsuariosModule
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
