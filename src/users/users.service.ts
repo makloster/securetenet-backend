@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { User } from './user.entity'
 import { Repository } from 'typeorm'
@@ -10,7 +10,17 @@ export class UsersService {
 
   constructor(@InjectRepository(User) private userRepository: Repository<User>) { }
 
-  createUser(user: CreateUserDto) {
+  async createUser(user: CreateUserDto) {
+    const userFound = await this.userRepository.findOne({
+      where: {
+        fullName: user.fullName
+      }
+    })
+
+    if (userFound) {
+      return new HttpException('Un usuario con este nombre ya existe', HttpStatus.CONFLICT)
+    }
+
     const newUser = this.userRepository.create(user)
     return this.userRepository.save(newUser)
   }
@@ -19,20 +29,37 @@ export class UsersService {
     return this.userRepository.find()
   }
 
-  getUser(id: string) {
-    return this.userRepository.findOne({
+  async getUser(id: string) {
+    const userFound = await this.userRepository.findOne({
       where: {
         id
       }
     })
+
+    if (!userFound) {
+      return new HttpException('No se han encontrado usuarios con ese ID', HttpStatus.NOT_FOUND) //! Si la sintaxis no es de UUID tira status 500!
+    }
+
+    return userFound
   }
 
-  deleteUser(id: string) {
-    return this.userRepository.delete({ id })
+  async deleteUser(id: string) {
+    const result = await this.userRepository.delete({ id })
+
+    if (result.affected === 0) {
+      return new HttpException('No se han encontrado usuarios con ese ID', HttpStatus.NOT_FOUND) //! Si la sintaxis no es de UUID tira status 500!
+    }
+
+    return result
   }
 
-  updateUser(id: string, user: UpdateUserDto) {
-    return this.userRepository.update({ id }, user)
-  }
+  async updateUser(id: string, user: UpdateUserDto) {
+    const result = await this.userRepository.update({ id }, user)
 
+    if (result.affected === 0) {
+      return new HttpException('No se han encontrado usuarios con ese ID', HttpStatus.NOT_FOUND) //! Si la sintaxis no es de UUID tira status 500!
+    }
+
+    return result
+  }
 }
