@@ -1,13 +1,14 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 
-const PORT = 3000
+import 'dotenv/config'
+
+const PORT = process.env.BACK_PORT
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   await app.listen(PORT)
   console.log(`listening on port -> ${PORT}`)
-  console.log(`http://localhost:3000/`)
-
+  console.log(`http://localhost:${PORT}/`)
 }
 bootstrap()

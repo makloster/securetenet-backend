@@ -1,12 +1,12 @@
 services:
   database:
-    image: postgres:16-alpine
+    image: ${DB_VER}
     environment:
-      - POSTGRES_DB=sn-db
-      - POSTGRES_USER=db-admin
-      - POSTGRES_PASSWORD=7a8s9.g5h6
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
     ports:
-      - '5432:5432'
+      - '${DB_PORT}:${DB_PORT}'
     volumes:
       - ./postgres_data:/var/lib/postgresql # EN WINDOWS quitar punto
 # volumes: # EN WINDOWS, descomentar bloque
