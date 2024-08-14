@@ -1,6 +1,6 @@
 services:
   database:
-    image: ${DB_VER}
+    image: ${DB_IMG}
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
