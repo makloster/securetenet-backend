@@ -6,9 +6,17 @@ export default class UserSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager
-  ): Promise<any> {
-    const userFactory = await factoryManager.get(User)
+  ): Promise<User[]> {
+    const items: User[] = []
 
-    await userFactory.saveMany(5)
+    try {
+    const userFactory = factoryManager.get(User)
+    items.push(...await userFactory.saveMany(5))
+  } catch (error) {
+    console.error('Failed to seed users:', error)
+    throw error
+  }
+
+    return items
   }
 }
