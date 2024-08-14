@@ -1,8 +1,7 @@
-import 'reflect-metadata'
 import 'dotenv/config'
 
 import { DataSource, DataSourceOptions } from 'typeorm'
-import { SeederOptions } from 'typeorm-extension'
+import { runSeeders, SeederOptions } from 'typeorm-extension'
 
 const DB_PORT = +process.env.DB_PORT
 const DB_HOST = process.env.DB_HOST
@@ -25,4 +24,8 @@ export const dsOptions: DataSourceOptions & SeederOptions = {
   factories: ['src/database/factories/**/*{.ts}'],
 }
 
-export const dataSource = new DataSource(dsOptions);
+export const dataSource = new DataSource(dsOptions)
+dataSource.initialize().then(async ()=>{
+  await runSeeders(dataSource)
+  process.exit()
+})

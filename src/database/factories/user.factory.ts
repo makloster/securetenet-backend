@@ -1,7 +1,8 @@
 import { setSeederFactory } from 'typeorm-extension'
-import { User } from 'src/users/user.entity'
+import { User } from '../../users/user.entity'
+import { Faker } from '@faker-js/faker'
 
-export default setSeederFactory(User, (faker) => {
+export const UserFactory = setSeederFactory (User, (faker:Faker) => {
     const user = new User()
 
     user.fullName = faker.person.fullName()
@@ -15,5 +16,6 @@ export default setSeederFactory(User, (faker) => {
     user.createdAt = new Date
     user.updatedAt = new Date
 
+    console.log('User.factory log:' + user)
     return user
 })
