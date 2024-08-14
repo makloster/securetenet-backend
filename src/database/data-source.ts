@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
-import { DataSource, DataSourceOptions } from 'typeorm'
-import { runSeeders, SeederOptions } from 'typeorm-extension'
+import { DataSourceOptions } from 'typeorm'
+import { SeederOptions } from 'typeorm-extension'
 
 const DB_PORT = +process.env.DB_PORT
 const DB_HOST = process.env.DB_HOST
@@ -16,16 +16,10 @@ export const dsOptions: DataSourceOptions & SeederOptions = {
   username: DB_USER,
   password: DB_PASS,
   database: DB_NAME,
-  entities: ['src/**/*.entity{.ts}'],
-  logging: true,
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  // logging: true,
   synchronize: true, // TODO! Sacar en prod
 
-  seeds: ['src/database/seeds/**/*{.ts}'],
-  factories: ['src/database/factories/**/*{.ts}'],
+  seeds: [__dirname + '/**/*.seed.ts'],
+  factories: [__dirname + '/**/*.factory.ts'],
 }
-
-export const dataSource = new DataSource(dsOptions)
-dataSource.initialize().then(async ()=>{
-  await runSeeders(dataSource)
-  process.exit()
-})
