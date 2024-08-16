@@ -1,13 +1,7 @@
-import 'dotenv/config'
-
+import { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER } from 'src/utils/env.constants'
 import { DataSourceOptions } from 'typeorm'
 import { SeederOptions } from 'typeorm-extension'
 
-const DB_PORT = +process.env.DB_PORT
-const DB_HOST = process.env.DB_HOST
-const DB_USER = process.env.DB_USER
-const DB_PASS = `${process.env.DB_PASS}`
-const DB_NAME = process.env.DB_NAME
 
 export const dsOptions: DataSourceOptions & SeederOptions = {
   type: 'postgres',
